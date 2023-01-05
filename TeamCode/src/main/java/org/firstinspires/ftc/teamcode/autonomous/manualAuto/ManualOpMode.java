@@ -12,12 +12,19 @@ import static android.os.SystemClock.sleep;
 
 
 //TODO: code strafe, test in VirtualBot
-@Autonomous(name = "ParkAuto")
+@Autonomous(name = "Manual_ParkAuto")
 public class ManualOpMode extends OpMode {
 
     DcMotor lf, lb, rf, rb;
     SleeveDetection sleeveDetection;
     OpenCvCamera camera;
+
+    // defining constants for ez editing
+    private static final int long_timer = 3000; // 3 sec
+    private static final int short_timer = 1000; // 1 sec, unused but here if we need while testing auto
+
+    private static final double drive_power = 0.1;
+    private static final double strafe_power = 0.1;
 
     String webcamName = "Webcam 1";
 
@@ -74,22 +81,22 @@ public class ManualOpMode extends OpMode {
 
     @Override
     public void start() {
-
-        lf.setPower(0.1);
-        rf.setPower(0.1);
-        lb.setPower(0.1);
-        rb.setPower(0.1);
-        sleep(3000);
+// changed to use the constant drive_power
+        lf.setPower(drive_power);
+        rf.setPower(drive_power);
+        lb.setPower(drive_power);
+        rb.setPower(drive_power);
+        sleep(long_timer);
 
         //strafe to face park pos
         switch (sleeveDetection.getPosition()) {
             case LEFT: //left
 
                 telemetry.addData("Detected left", 1);
-                rf.setPower(0.1);
-                rb.setPower(-0.1);
-                lf.setPower(-0.1);
-                lb.setPower(0.1);
+                rf.setPower(strafe_power); // strafing instead of driving; even though they have the same value, stored separately for convenience
+                rb.setPower(-strafe_power);
+                lf.setPower(-strafe_power);
+                lb.setPower(strafe_power);
                 break;
             case CENTER: //if the middle parkpos
 
@@ -97,23 +104,38 @@ public class ManualOpMode extends OpMode {
                 break;
             case RIGHT: //right
                 telemetry.addData("Detected right", 3);
-                rf.setPower(-0.1);
-                rb.setPower(0.1);
-                lf.setPower(0.1);
-                lb.setPower(-0.1);
+                rf.setPower(-strafe_power);
+                rb.setPower(strafe_power);
+                lf.setPower(strafe_power);
+                lb.setPower(-strafe_power);
+                break;
+            default: // error for if no sleeve
+                telemetry.addData("Error: No Sleeve", "No Sleeve Detected.");
                 break;
         }
-        sleep(3000);
+
+        sleep(long_timer);
         telemetry.addData("Parking", 0);
-        lf.setPower(0);
-        rf.setPower(0);
-        lb.setPower(0);
-        rb.setPower(0);
+        stopMotors(); // stops motors (no way1!/1?!)
 
     }
 
     @Override
+    public void stop() {
+        stopMotors();
+    }
+
+    @Override
     public void loop() {
+
+    }
+
+
+    private void stopMotors() { // func to stop motors
+        lf.setPower(0);
+        rf.setPower(0);
+        lb.setPower(0);
+        rb.setPower(0);
     }
 
 
