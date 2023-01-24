@@ -40,7 +40,7 @@ public class LiftSubsystem extends SubsystemBase {
     private final ProfiledPIDController controller = new ProfiledPIDController(kP, kI, kD,
             new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration));
 
-    public static double manualPower = 40; //these are in ticks
+    public static double manualPower = 200; //these are in ticks
     public static int threshold = 20;
 
     private final DoubleSupplier doubleSupplier;
@@ -137,6 +137,7 @@ public class LiftSubsystem extends SubsystemBase {
         left.set(output);
         right.set(output);
     }
+    // add slowmode
     @Override
     public void periodic() {
         if(doubleSupplier.getAsDouble() != 0) {
