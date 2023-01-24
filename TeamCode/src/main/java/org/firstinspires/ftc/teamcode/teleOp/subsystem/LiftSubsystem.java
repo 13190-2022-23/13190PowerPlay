@@ -132,20 +132,14 @@ public class LiftSubsystem extends SubsystemBase {
         return currentTarget;
     }
 
+    //this should be default command
     public void stable(){
         output = controller.calculate(right.getCurrentPosition()) + kG;
         left.set(output);
         right.set(output);
     }
-    // add slowmode
-    @Override
-    public void periodic() {
-        if(doubleSupplier.getAsDouble() != 0) {
-            controller.setGoal((int)(right.getCurrentPosition()+(doubleSupplier.getAsDouble()*manualPower)));
-            stable();
-        }
-        else {
-            stable();
-        }
+    public void manualLift(double input){
+        controller.setGoal((int)(right.getCurrentPosition()+(doubleSupplier.getAsDouble()*manualPower)));
     }
+
 }

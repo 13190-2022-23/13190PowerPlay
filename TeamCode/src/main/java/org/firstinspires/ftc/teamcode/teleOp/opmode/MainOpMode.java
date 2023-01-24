@@ -7,8 +7,10 @@ import org.firstinspires.ftc.teamcode.teleOp.command.claw.Grab;
 import org.firstinspires.ftc.teamcode.teleOp.command.claw.Release;
 import org.firstinspires.ftc.teamcode.teleOp.command.drive.DriveRobotCentric;
 import org.firstinspires.ftc.teamcode.teleOp.command.drive.DriveSlowMode;
+import org.firstinspires.ftc.teamcode.teleOp.command.lift.ManualLift;
 import org.firstinspires.ftc.teamcode.teleOp.command.lift.SetConeStack;
 import org.firstinspires.ftc.teamcode.teleOp.command.lift.SetJunction;
+import org.firstinspires.ftc.teamcode.teleOp.command.lift.SlowManualLift;
 import org.firstinspires.ftc.teamcode.util.ConeStack;
 import org.firstinspires.ftc.teamcode.util.Junction;
 
@@ -16,6 +18,8 @@ import org.firstinspires.ftc.teamcode.util.Junction;
 public class MainOpMode extends BaseOpMode {
     private DriveRobotCentric robotCentricDrive;
     private DriveSlowMode slowMode;
+    private ManualLift manualLift;
+    private SlowManualLift slowManualLift;
 
     @Override
     public void initialize() {
@@ -41,6 +45,14 @@ public class MainOpMode extends BaseOpMode {
         gb2(GamepadKeys.Button.LEFT_BUMPER)
                 .toggleWhenPressed(new Grab(claw).andThen(new SetJunction(lift, Junction.GROUND)),
                         new Release(claw).andThen(new SetJunction(lift, Junction.NONE)));
+
+        //manual lift
+        manualLift = new ManualLift(lift, gamepadEx2::getRightY);
+
+        slowManualLift = new SlowManualLift(lift,gamepadEx2::getRightY);
+
+        gb2(GamepadKeys.Button.RIGHT_BUMPER)
+                .whileHeld(slowManualLift);
 
         //junctions
         gb2(GamepadKeys.Button.A)
@@ -70,5 +82,6 @@ public class MainOpMode extends BaseOpMode {
 
         register(drive, lift, claw);
         drive.setDefaultCommand(robotCentricDrive);
+        lift.setDefaultCommand(manualLift);
     }
 }
