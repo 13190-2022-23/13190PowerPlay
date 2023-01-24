@@ -28,9 +28,9 @@ public class SlowManualLift extends CommandBase {
 
     }
 
-//      uncomment if needed
+
     @Override
    public boolean isFinished() {
-       return false;
+       return false; //might need to change this?
     }
 }
