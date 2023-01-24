@@ -27,9 +27,8 @@ public class ManualLift extends CommandBase {
 
     }
 
-//      uncomment if needed
-//    @Override
-//    public boolean isFinished() {
-//        return false;
-//    }
+   @Override
+   public boolean isFinished() {
+       return false;
+    }
 }
