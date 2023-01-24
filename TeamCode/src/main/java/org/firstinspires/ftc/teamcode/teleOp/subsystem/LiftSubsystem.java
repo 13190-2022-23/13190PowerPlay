@@ -43,16 +43,13 @@ public class LiftSubsystem extends SubsystemBase {
     public static double manualPower = 200; //these are in ticks
     public static int threshold = 20;
 
-    private final DoubleSupplier doubleSupplier;
-
     private int currentTarget;
 
     private double output;
 
-    public LiftSubsystem(MotorEx left, MotorEx right, DoubleSupplier doubleSupplier) {
+    public LiftSubsystem(MotorEx left, MotorEx right) {
         this.left = left;
         this.right = right;
-        this.doubleSupplier = doubleSupplier;
     }
 
     public void setJunction(Junction junction){
@@ -139,7 +136,7 @@ public class LiftSubsystem extends SubsystemBase {
         right.set(output);
     }
     public void manualLift(double input){
-        controller.setGoal((int)(right.getCurrentPosition()+(doubleSupplier.getAsDouble()*manualPower)));
+        controller.setGoal((int)(right.getCurrentPosition()+(input*manualPower)));
     }
 
 }

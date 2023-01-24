@@ -37,7 +37,7 @@ public class BaseOpMode extends CommandOpMode {
         setUp();
 
         drive = new DriveSubsystem(leftBack, leftFront, rightBack, rightFront);
-        lift = new LiftSubsystem(liftL, liftR, gamepadEx2::getLeftY);
+        lift = new LiftSubsystem(liftL, liftR);
         claw = new ClawSubsystem(clawServo);
         lift.setJunction(Junction.NONE);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
